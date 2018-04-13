@@ -153,7 +153,10 @@ class Category_Import_Reloaded {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		
-		$this->loader->add_action('init', $plugin_admin, 'check_for_event_submissions');
+		$this->loader->add_action( 'admin_post_cir_form_response', $plugin_admin, 'check_for_event_submissions');
+		//$this->loader->add_action('init', $plugin_admin, 'check_for_event_submissions');
+		// Register admin notices
+		$this->loader->add_action( 'admin_notices', $plugin_admin, 'print_plugin_admin_notices');
 
 	}
 

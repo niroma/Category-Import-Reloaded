@@ -110,7 +110,8 @@ class Category_Import_Reloaded_Admin {
      *        Administration Menus: http://codex.wordpress.org/Administration_Menus
      *
      */
-		add_submenu_page("edit.php", 'Category Import Reloaded', 'Category Import', 'manage_options', $this->plugin_name, array($this, 'display_plugin_setup_page'));	
+		add_menu_page(	'Category Import Reloaded', 'Category Import Reloaded', 'manage_categories', $this->plugin_name );
+		add_submenu_page( $this->plugin_name, 'Category Import Reloaded', 'Category Import', 'manage_categories', $this->plugin_name, array($this, 'display_plugin_setup_page') );
 	}
 	
 	public function display_plugin_setup_page() {
@@ -128,13 +129,14 @@ class Category_Import_Reloaded_Admin {
 		return false;
 	}
 	
-	//add_action('template_redirect', 'check_for_event_submissions');
-
-	function check_for_event_submissions(){
 	
-			if (isset($_POST[$this->plugin_name.'-submit'])){
+	public function check_for_event_submissions(){
+			if ( isset($_POST['_wpnonce']) && wp_verify_nonce($_POST['_wpnonce'], $this->plugin_name.'submit-taxonomies') ){
+				$admin_notice = '';
+				$messageLog = '';
 				$taxonomyActive = $_POST[$this->plugin_name.'-taxonomy'];
-				$delimiter = strlen(trim($_POST[$this->plugin_name.'-delimiter'])) != 0?$_POST[$this->plugin_name.'-delimiter']:"$";
+				$delimiter = ( strlen(sanitize_text_field(trim($_POST[$this->plugin_name.'-delimiter']))) != 0 ) ? $_POST[$this->plugin_name.'-delimiter']:"$";
+				if ( strlen($delimiter) > 2 ) $delimiter = "$";
 				$lines = explode(PHP_EOL, $_POST[$this->plugin_name.'-bulkCategoryList']);
 				$countSuccess = 0;
 				$countErrors = 0;
@@ -196,14 +198,52 @@ class Category_Import_Reloaded_Admin {
 							} else $countErrors++;
 						}	
 					}
+				} 
+				if ($countErrors > 0 ) {
+					$admin_notice = "error";
+					$messageLog .= $countErrors .' categories already in database ';
 				}
-				/*
-				if ($countErrors > 0 ) echo '<div id="message" class="updated fade"><p><strong>'. $countErrors .' categories already in database </strong></p></div>';
-				if ($countSuccess > 0 ) echo '<div id="message" class="updated fade"><p><strong>'. $countSuccess .' categories successully added!! </strong></p></div>';
-				*/
-				wp_redirect($_POST[$this->plugin_name.'-redirect_url']); // add a hidden input with get_permalink()
+				if ($countSuccess > 0 ) {
+					$admin_notice = "success";
+					$messageLog .= $countSuccess .' categories successully added ! ';
+				} 
+				
+				$this->custom_redirect( $admin_notice, $messageLog);
 				die();
+			}  else {
+				wp_die( __( 'Invalid nonce specified', $this->plugin_name ), __( 'Error', $this->plugin_name ), array(
+						'response' 	=> 403,
+						'back_link' => 'admin.php?page=' . $this->plugin_name,
+				) );
 			}
+	}
+	
+	public function custom_redirect( $admin_notice, $response ) {
+		wp_redirect( esc_url_raw( add_query_arg( array(
+									'cir_admin_add_notice' => $admin_notice,
+									'cir_response' => $response,
+									),
+							admin_url('admin.php?page='. $this->plugin_name ) 
+					) ) );
+
+	}
+
+	public function print_plugin_admin_notices() {              
+		  if ( isset( $_REQUEST['cir_admin_add_notice'] ) ) {
+			if( $_REQUEST['cir_admin_add_notice'] === "success") {
+				$html =	'<div class="notice notice-success is-dismissible"> 
+							<p><strong>' . htmlspecialchars( print_r( $_REQUEST['cir_response'], true) ) . '</strong></p></div>';
+				echo $html;
+			}
+			if( $_REQUEST['cir_admin_add_notice'] === "error") {
+				$html =	'<div class="notice notice-error is-dismissible"> 
+							<p><strong>' . htmlspecialchars( print_r( $_REQUEST['cir_response'], true) ) . '</strong></p></div>';
+				echo $html;
+			}
+		  } else {
+			  return;
+		  }
+
 	}
 
 }
