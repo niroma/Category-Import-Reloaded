@@ -27,10 +27,15 @@ Default format for importing is the following :
 
 `
 Categorie1/subactegorie1
+
 Categorie1/subactegorie2
+
 Categorie1/subactegorie3
+
 Categorie2/subactegorie1
+
 Categorie2/subactegorie2
+
 Categorie2/subactegorie3
 `
 
@@ -38,10 +43,15 @@ Categorie2/subactegorie3
 
 `
 Categorie1$categorie1-slug/subactegorie1$subcategorie1-slug
+
 Categorie1$categorie1-slug/subactegorie2$subcategorie2-slug
+
 Categorie1$categorie1-slug/subactegorie3$subcategorie3-slug
+
 Categorie2$categorie2-slug/subactegorie1$subcategorie1-slug
+
 Categorie2$categorie2-slug/subactegorie2$subcategorie2-slug
+
 Categorie2$categorie2-slug/subactegorie3$subcategorie3-slug
 `
 
