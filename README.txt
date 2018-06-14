@@ -1,9 +1,11 @@
 === Category Import Reloaded ===
-Donate link: https://www.niroma.net/
+Contributors: nir0ma
 Tags: category, taxonomy, import, create, bulk
+Donate link: https://www.niroma.net
 Requires at least: 3.0.1
-Tested up to: 4.9.5
-Stable tag: 4.3
+Tested up to: 4.9.6
+Requires PHP: 5.6.0
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,28 +16,28 @@ Category Import Reloaded is a wordpress plug-in which allows user to bulk create
 Category Import Reloaded is a wordpress plug-in which allows user to bulk create categories and taxonomies with a custom input format.
 
 Plugins allows to :
+
 *  Bulk create categories or taxonomies
 *  Specify custom slug delimiter
 *  Possibility to specify a custom slug for each categories
 
 Default format for importing is the following :
 
-- Without Slug :
-	Categorie1/subactegorie1
-	Categorie1/subactegorie2
-	Categorie1/subactegorie3
-	Categorie2/subactegorie1
-	Categorie2/subactegorie2
-	Categorie2/subactegorie3
+* Without Slug :
+Categorie1/subactegorie1
+Categorie1/subactegorie2
+Categorie1/subactegorie3
+Categorie2/subactegorie1
+Categorie2/subactegorie2
+Categorie2/subactegorie3
 
-- Specifying slug :
-	Categorie1$categorie1-slug/subactegorie1$subcategorie1-slug
-	Categorie1$categorie1-slug/subactegorie2$subcategorie2-slug
-	Categorie1$categorie1-slug/subactegorie3$subcategorie3-slug
-	Categorie2$categorie2-slug/subactegorie1$subcategorie1-slug
-	Categorie2$categorie2-slug/subactegorie2$subcategorie2-slug
-	Categorie2$categorie2-slug/subactegorie3$subcategorie3-slug
-
+* Specifying slug :
+Categorie1$categorie1-slug/subactegorie1$subcategorie1-slug
+Categorie1$categorie1-slug/subactegorie2$subcategorie2-slug
+Categorie1$categorie1-slug/subactegorie3$subcategorie3-slug
+Categorie2$categorie2-slug/subactegorie1$subcategorie1-slug
+Categorie2$categorie2-slug/subactegorie2$subcategorie2-slug
+Categorie2$categorie2-slug/subactegorie3$subcategorie3-slug
 
 == Installation ==
 
