@@ -3,7 +3,7 @@ Contributors: nir0ma
 Tags: category, taxonomy, import, create, bulk
 Donate link: https://www.niroma.net
 Requires at least: 3.0.1
-Tested up to: 4.9.6
+Tested up to: 5.1.1
 Requires PHP: 5.6.0
 Stable tag: 1.1.4
 License: GPLv2 or later
@@ -67,3 +67,6 @@ Categorie2$categorie2-slug/subactegorie3$subcategorie3-slug
 * Total rewrite of "Category Import" plugin by Jiayu (James) Ji.
 * Now support multiple sub categories with the same name (example : Level0/Level1, Level1/Level1).
 * Now support taxonomies.
+
+= 1.1.0 =
+* Taxonomies support fixed (Was not working in v1.0.0)

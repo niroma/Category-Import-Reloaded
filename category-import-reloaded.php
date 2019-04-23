@@ -15,7 +15,7 @@
  * Plugin Name:       Category Import Reloaded
  * Plugin URI:        http://wordpress.org/extend/plugins/category-import-reloaded/
  * Description:       This plug-in allows user to bulk create categories and taxonomies with a custom input format. This plugin is an update of the no more maintained "Category Import" plugin originally developped by Jiayu (James) Ji.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            Niroma
  * Author URI:        https://www.niroma.net/
  * License:           GPL-2.0+
@@ -39,7 +39,7 @@ define( __NAMESPACE__ . '\NS', __NAMESPACE__ . '\\' );
 
 define( NS . 'PLUGIN_NAME', 'category-import-reloaded' );
 
-define( NS . 'PLUGIN_VERSION', '1.0.0' );
+define( NS . 'PLUGIN_VERSION', '1.1.0' );
 
 define( NS . 'PLUGIN_NAME_DIR', plugin_dir_path( __FILE__ ) );
 

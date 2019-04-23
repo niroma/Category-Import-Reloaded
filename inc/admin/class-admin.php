@@ -137,7 +137,7 @@ class Admin {
 			if ( isset($_POST['_wpnonce']) && wp_verify_nonce($_POST['_wpnonce'], $this->plugin_name.'submit-taxonomies') ){
 				$admin_notice = '';
 				$messageLog = '';
-				$taxonomyActive = $_POST[$this->plugin_name.'-taxonomy'];
+				$taxonomyActive = $_POST[$this->plugin_name.'-taxonomy'] ? $_POST[$this->plugin_name.'-taxonomy'] : 'category';
 				$delimiter = ( strlen(sanitize_text_field(trim($_POST[$this->plugin_name.'-delimiter']))) != 0 ) ? $_POST[$this->plugin_name.'-delimiter']:"$";
 				if ( strlen($delimiter) > 2 ) $delimiter = "$";
 				$lines = explode(PHP_EOL, $_POST[$this->plugin_name.'-bulkCategoryList']);
@@ -145,7 +145,7 @@ class Admin {
 				$countErrors = 0;
 				$parent_id = '';
 				$rootCategories = array();
-				$rootTerms = get_terms( array( 'taxonomy' => 'category', 'parent' => 0, 'hide_empty' => false ) );
+				$rootTerms = get_terms( array( 'taxonomy' => $taxonomyActive, 'parent' => 0, 'hide_empty' => false ) );
 				foreach ($rootTerms as $rootTerm) {
 					$rootCategories[] = array('id' => $rootTerm->term_id, 'name' => $rootTerm->name);
 				}
@@ -174,7 +174,7 @@ class Admin {
 								$parent_id = $this->termAlreadyExists($rootCategories, 'name', $cat_name, 'id');
 								$countErrors++;
 							} else {
-								$result = wp_insert_term( $cat_name, 'category', array('slug' => $cat_slug) );
+								$result = wp_insert_term( $cat_name, $taxonomyActive, array('slug' => $cat_slug) );
 								if ( ! is_wp_error( $result ) ) {
 									$parent_id = isset( $result['term_id'] ) ? $result['term_id'] : '';
 									$rootCategories[] = array('id' => $parent_id, 'name' => $cat_name);
@@ -184,7 +184,7 @@ class Admin {
 						} else {
 							if (!empty($parent_id)) {
 								$siblingsCategories = array();
-								$parentChildren = get_terms( array('taxonomy' => 'category', 'parent' => $parent_id, 'hide_empty' => false ) );
+								$parentChildren = get_terms( array('taxonomy' => $taxonomyActive, 'parent' => $parent_id, 'hide_empty' => false ) );
 								foreach ($parentChildren as $child) {
 									$siblingsCategories[] = array('id' => $child->term_id, 'name' => $child->name);
 								}
@@ -192,7 +192,7 @@ class Admin {
 									$parent_id = $this->termAlreadyExists($siblingsCategories, 'name', $cat_name, 'id');
 									$countErrors++;
 								} else {
-									$result = wp_insert_term( $cat_name, 'category', array('parent' => $parent_id, 'slug' => $cat_slug) );
+									$result = wp_insert_term( $cat_name, $taxonomyActive, array('parent' => $parent_id, 'slug' => $cat_slug) );
 									if ( ! is_wp_error( $result ) ) {
 										$parent_id = isset( $result['term_id'] ) ? $result['term_id'] : '';
 										$countSuccess++;
