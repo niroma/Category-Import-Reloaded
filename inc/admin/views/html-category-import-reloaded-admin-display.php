@@ -50,8 +50,8 @@
 				</th>
 				<td>								
 					<input type="text" id="<?php echo $this->plugin_name; ?>-delimiter" name="<?php echo $this->plugin_name; ?>-delimiter" maxlength="2" size="2" class="regular-text" />
-					<p  id="<?php echo $this->plugin_name; ?>-delimiter-description" class="description">Define a delimiter here to split the category name and slug. (default: $).</p>	
-					<p class="example">Example : Level A / Level B$level-b1 / Level C$level-c1</p>	
+					<p id="<?php echo $this->plugin_name; ?>-delimiter-description" class="description"><?php esc_attr_e('Define a delimiter here to split the category name and slug. (default: $).', $this->plugin_name); ?></p>	
+					<p class="example"><?php esc_attr_e('Example : Level A / Level B$level-b1 / Level C$level-c1', $this->plugin_name); ?></p>	
 				</td>
 			</tr>	
 			<tr valign="top">
@@ -68,9 +68,9 @@
 				<th scope="row">
 				</th>
 				<td>
-					<p class="description">Enter the categories you want to add.</p>
-					<p class="description">If you want to make a hierarchy, put a slash between the category and the sub-category in one line.</p>
-					<p class="example">Example : Level A/Level B/Level C</p>
+					<p class="description"><?php esc_attr_e('Enter the categories you want to add.', $this->plugin_name); ?></p>
+					<p class="description"><?php esc_attr_e('If you want to make a hierarchy, put a slash between the category and the sub-category in one line.', $this->plugin_name); ?></p>
+					<p class="example"><?php esc_attr_e('Example : Level A/Level B/Level C', $this->plugin_name); ?></p>
 				</td>
 			</tr>
 			<tr valign="top">
@@ -86,5 +86,5 @@
     </form>
 </div>
 <?php } else { ?>
-	<p><?php __("You are not authorized to perform this operation.", $this->plugin_name); ?></p>
+	<p><?php esc_attr_e('You are not authorized to perform this operation.', $this->plugin_name); ?></p>
 <?php  } ?>
