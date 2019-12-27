@@ -102,11 +102,11 @@ class Admin {
 		//wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/category-import-reloaded-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
-	
+
 	public function display_plugin_setup_page() {
 		include_once( 'views/html-category-import-reloaded-admin-display.php' );
 	}
-	
+
 	public function add_plugin_admin_menu() {
 
     /*
@@ -120,8 +120,8 @@ class Admin {
 		add_menu_page(	'Category Import Reloaded', 'Category Import Reloaded', 'manage_categories', $this->plugin_name );
 		add_submenu_page( $this->plugin_name, 'Category Import Reloaded', 'Category Import', 'manage_categories', $this->plugin_name, array($this, 'display_plugin_setup_page') );
 	}
-	
-	
+
+
 	private function termAlreadyExists($array, $key, $val, $return) {
 		foreach ($array as $item) {
 			if (isset($item[$key])) {
@@ -131,8 +131,8 @@ class Admin {
 		}
 		return false;
 	}
-	
-	
+
+
 	public function check_for_event_submissions(){
 			if ( isset($_POST['_wpnonce']) && wp_verify_nonce($_POST['_wpnonce'], $this->plugin_name.'submit-taxonomies') ){
 				$admin_notice = '';
@@ -146,20 +146,21 @@ class Admin {
 				$parent_id = '';
 				$rootCategories = array();
 				$rootTerms = get_terms( array( 'taxonomy' => $taxonomyActive, 'parent' => 0, 'hide_empty' => false ) );
-				foreach ($rootTerms as $rootTerm) {
-					$rootCategories[] = array('id' => $rootTerm->term_id, 'name' => $rootTerm->name);
-				}
-				
+				//use wp_list_pluck for cleaner code.
+				$rootCategories = wp_list_pluck($rootTerms, 'term_id','name');
+
 				foreach($lines as $line){
-					$split_line = explode('/', $line);
+					//use str_getcsv to enable eclosure with quotes.
+					$split_line = str_getcsv(stripslashes($line), '/','"');
+					// $split_line = explode('/', $line);
 					$l =  count($split_line);
 					for ($i = 0; $i < $l; $i++) {
 						$new_line = $split_line[$i];
 						$prev_line = '';
-						
+
 						if (strlen(trim($new_line)) == 0) break;
 						$new_line = sanitize_text_field(trim($new_line));
-						
+
 						if(strpos($new_line, $delimiter) !== false){
 							$cat_name_slug = explode($delimiter,$new_line);
 							$cat_name =  sanitize_text_field(trim($cat_name_slug[0]));
@@ -168,10 +169,11 @@ class Admin {
 							$cat_name = $new_line;
 							$cat_slug = $new_line;
 						}
-						
+
 						if ($i == 0) {
-							if ( $this->termAlreadyExists($rootCategories, 'name', $cat_name, 'id') ) {
-								$parent_id = $this->termAlreadyExists($rootCategories, 'name', $cat_name, 'id');
+							//use isset rather than separate method, simpler.
+							if ( isset($rootCategories[$cat_name]) ) {
+								$parent_id = $rootCategories[$cat_name];
 								$countErrors++;
 							} else {
 								$result = wp_insert_term( $cat_name, $taxonomyActive, array('slug' => $cat_slug) );
@@ -185,11 +187,10 @@ class Admin {
 							if (!empty($parent_id)) {
 								$siblingsCategories = array();
 								$parentChildren = get_terms( array('taxonomy' => $taxonomyActive, 'parent' => $parent_id, 'hide_empty' => false ) );
-								foreach ($parentChildren as $child) {
-									$siblingsCategories[] = array('id' => $child->term_id, 'name' => $child->name);
-								}
-								if ( $this->termAlreadyExists($siblingsCategories, 'name', $cat_name, 'id') ) {
-									$parent_id = $this->termAlreadyExists($siblingsCategories, 'name', $cat_name, 'id');
+                $siblingsCategories = wp_list_pluck($parentChildren, 'term_id','name');
+								//using isset for simpler code.
+								if ( isset($siblingsCategories[$cat_name]) ) {
+									$parent_id = $siblingsCategories[$cat_name];
 									$countErrors++;
 								} else {
 									$result = wp_insert_term( $cat_name, $taxonomyActive, array('parent' => $parent_id, 'slug' => $cat_slug) );
@@ -199,9 +200,9 @@ class Admin {
 									} else $countErrors++;
 								}
 							} else $countErrors++;
-						}	
+						}
 					}
-				} 
+				}
 				if ($countErrors > 0 ) {
 					$admin_notice = "error";
 					$messageLog .= $countErrors .' categories already in database ';
@@ -209,8 +210,8 @@ class Admin {
 				if ($countSuccess > 0 ) {
 					$admin_notice = "success";
 					$messageLog .= $countSuccess .' categories successully added ! ';
-				} 
-				
+				}
+
 				$this->custom_redirect( $admin_notice, $messageLog);
 				die();
 			}  else {
@@ -220,26 +221,26 @@ class Admin {
 				) );
 			}
 	}
-	
+
 	public function custom_redirect( $admin_notice, $response ) {
 		wp_redirect( esc_url_raw( add_query_arg( array(
 									'cir_admin_add_notice' => $admin_notice,
 									'cir_response' => $response,
 									),
-							admin_url('admin.php?page='. $this->plugin_name ) 
+							admin_url('admin.php?page='. $this->plugin_name )
 					) ) );
 
 	}
 
-	public function print_plugin_admin_notices() {              
+	public function print_plugin_admin_notices() {
 		  if ( isset( $_REQUEST['cir_admin_add_notice'] ) ) {
 			if( $_REQUEST['cir_admin_add_notice'] === "success") {
-				$html =	'<div class="notice notice-success is-dismissible"> 
+				$html =	'<div class="notice notice-success is-dismissible">
 							<p><strong>' . htmlspecialchars( print_r( $_REQUEST['cir_response'], true) ) . '</strong></p></div>';
 				echo $html;
 			}
 			if( $_REQUEST['cir_admin_add_notice'] === "error") {
-				$html =	'<div class="notice notice-error is-dismissible"> 
+				$html =	'<div class="notice notice-error is-dismissible">
 							<p><strong>' . htmlspecialchars( print_r( $_REQUEST['cir_response'], true) ) . '</strong></p></div>';
 				echo $html;
 			}
