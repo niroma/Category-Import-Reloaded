@@ -179,7 +179,7 @@ class Admin {
 								$result = wp_insert_term( $cat_name, $taxonomyActive, array('slug' => $cat_slug) );
 								if ( ! is_wp_error( $result ) ) {
 									$parent_id = isset( $result['term_id'] ) ? $result['term_id'] : '';
-									$rootCategories[] = array('id' => $parent_id, 'name' => $cat_name);
+									$rootCategories[$cat_name] = $parent_id;
 									$countSuccess++;
 								} else $countErrors++;
 							}
