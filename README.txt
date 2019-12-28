@@ -3,7 +3,7 @@ Contributors: nir0ma, aurovrata
 Tags: category, taxonomy, import, create, bulk
 Donate link: https://www.niroma.net
 Requires at least: 3.0.1
-Tested up to: 5.1.1
+Tested up to: 5.3.2
 Requires PHP: 5.6.0
 Stable tag: trunk
 License: GPLv2 or later
