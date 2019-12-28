@@ -70,3 +70,6 @@ Categorie2$categorie2-slug/subactegorie3$subcategorie3-slug
 
 = 1.1.0 =
 * Taxonomies support fixed (Was not working in v1.0.0)
+
+= 1.1.1 =
+* Mutliples fixes thanks to aurovrata
