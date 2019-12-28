@@ -1,5 +1,5 @@
 === Category Import Reloaded ===
-Contributors: nir0ma
+Contributors: nir0ma, aurovrata
 Tags: category, taxonomy, import, create, bulk
 Donate link: https://www.niroma.net
 Requires at least: 3.0.1
